@@ -20,7 +20,7 @@ Before build the project find App.config
     
  ** How to run**
  1. Using visual studio build and run  
- ![s](https://i.ibb.co/B6crLTX/visualstudio.png "s")
+ ![s](https://i.ibb.co/k4tTb9X/visualstudio.png"s")
  
  2. Using Nunit console run 
  [![s](https://i.ibb.co/qNL0VS5/nunit-console.png "s")
