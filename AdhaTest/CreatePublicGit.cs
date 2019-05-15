@@ -7,6 +7,9 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Configuration;
+using OpenQA.Selenium.Support.Extensions;
+using OpenQA.Selenium.Support.UI;
+
 namespace AdhaTest
 {
     [Order(1)]
@@ -17,18 +20,19 @@ namespace AdhaTest
         private IWebElement signButton, login_field, password,
             commit,btn_new,repository_name,btn_submit;
 
-        private string username, pass, reponame;
+        private string username, pass, gistdesc, gistfile;
+        
           
         [SetUp]
         public void startBrowser()
         {
             username = ConfigurationSettings.AppSettings["username"];
             pass = ConfigurationSettings.AppSettings["password"];
-            reponame = ConfigurationSettings.AppSettings["reponame"];
-
+            gistdesc = ConfigurationSettings.AppSettings["gistdesc"];
+            gistfile = ConfigurationSettings.AppSettings["gistfile"];
             driver = new ChromeDriver(); 
             driver.Manage().Window.Maximize();
-            driver.Url = "https://github.com/";
+            driver.Url = "https://gist.github.com/discover";
         }
 
         [Test]
@@ -47,20 +51,23 @@ namespace AdhaTest
             password.SendKeys(pass);
             commit.Click();
             var iconBell = driver.FindElement(By.CssSelector("svg.octicon.octicon-bell > path"));
-            Assert.That(iconBell.Displayed, Is.True, "dashboard is display");
+            Assert.That(iconBell.Displayed, Is.True, "gist home is display");
 
-            btn_new = driver.FindElement(By.LinkText("New"));
-            btn_new.Click();
+            var add = driver.FindElement(By.CssSelector("svg.octicon.octicon-plus > path"));
+            add.Click();
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            var desc = wait.Until(driver => driver.FindElement(By.CssSelector("input.form-control.input-block.input-contrast"))); 
+            desc.SendKeys(gistdesc);
+            var filename = driver.FindElement(By.CssSelector("div#gists > div:nth-of-type(2) > div > div > div > input:nth-of-type(2)"));
+            filename.SendKeys(gistfile);
 
-            repository_name = driver.FindElement(By.Id("repository_name"));
-            btn_submit = driver.FindElement(By.CssSelector("button.btn.btn-primary.first-in-line"));
-            Assert.That(repository_name.Displayed,Is.True,"New Project page display");
+            //driver.ExecuteJavaScript(@"var theDiv = document.getElementsByClassName('.CodeMirror - line');
+            //var content = document.createTextNode('This is a paragraph');
+            //theDiv.appendChild(content);");
 
-            repository_name.SendKeys(reponame);
-            btn_submit.Click();
+            var ccc = driver.FindElement(By.CssSelector("div#gists > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(5) > div > div > div > div > div:nth-of-type(5) > div > pre"));
+            ccc.SendKeys("ddd");
 
-            var succespage = driver.FindElement(By.CssSelector("span.input-group.width-full"));
-            Assert.That(succespage.Displayed,Is.True,"new repo success created");
         } 
         [TearDown]
         public void closeBrowser()

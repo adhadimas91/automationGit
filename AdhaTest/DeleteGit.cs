@@ -26,11 +26,11 @@ namespace AdhaTest
         {
             username = ConfigurationSettings.AppSettings["username"];
             pass = ConfigurationSettings.AppSettings["password"];
-            reponame = ConfigurationSettings.AppSettings["reponame"];
+            reponame = "dua";
 
             driver = new ChromeDriver();
             driver.Manage().Window.Maximize();
-            driver.Url = "https://github.com/";
+            driver.Url = "https://gist.github.com/discover";
         }
 
         [Test]
@@ -51,8 +51,11 @@ namespace AdhaTest
             var iconBell = driver.FindElement(By.CssSelector("svg.octicon.octicon-bell > path"));
             Assert.That(iconBell.Displayed, Is.True, "dashboard is display");
 
+            var add = driver.FindElement(By.CssSelector("svg.octicon.octicon-plus > path"));
+            add.Click();
+
             //find repo in list
-            var repos = driver.FindElement(By.CssSelector("div:nth-of-type(4) > div > aside > div:nth-of-type(2) > div > div > ul"));
+            var repos = driver.FindElement(By.CssSelector("main#gist-pjax-container > div > div > div > ul "));
             List<IWebElement> reposList = repos.FindElements(By.TagName("li")).ToList();
             foreach (var li in reposList)
             {
@@ -63,26 +66,14 @@ namespace AdhaTest
                 }
             }
 
-            var fieldclone = driver.FindElement(By.CssSelector("span.input-group.width-full"));
-            Assert.That(fieldclone.Displayed, Is.True, "repo page info has display");
-
-            var setting = driver.FindElement(By.CssSelector("svg.octicon.octicon-gear"));
-            setting.Click();
-
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-            var renamefield = wait.Until(driver => driver.FindElement(By.Name("new_name")));
-
-            Assert.That(renamefield.Displayed, Is.True, "Repo setting has open");
-            
-            var btndelete = driver.FindElement(By.CssSelector("div#options_bucket > div:nth-of-type(9) > ul > li:nth-of-type(4) > details > summary"));
+           var btndelete = driver.FindElement(By.CssSelector("button.btn.btn-sm.btn-danger"));
             btndelete.Click();
 
-            var fieldelete = driver.FindElement(By.CssSelector("div#options_bucket > div:nth-of-type(9) > ul > li:nth-of-type(4) > details > details-dialog > div:nth-of-type(3) > form > p > input"));
-            fieldelete.SendKeys($"{username}/{reponame}");
+            driver.SwitchTo().Alert().Accept();
 
-           var btndeleted = driver.FindElement(By.CssSelector(
-                "div#options_bucket > div:nth-of-type(9) > ul > li:nth-of-type(4) > details > details-dialog > div:nth-of-type(3) > form > button"));
-            btndeleted.Click();
+           // var setting = driver.FindElement(By.CssSelector("svg.octicon.octicon-gear"));
+           // setting.Click();
+ 
         }
 
         [TearDown]
