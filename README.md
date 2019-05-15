@@ -12,9 +12,10 @@ write using c#
 create repo,update ,delete and see your repository
 Before build the project find App.config
 ```
-<add key="username" value="insert your username" />
-<add key="password" value="insert your username" />
-<add key="reponame" value="and your repo" />
+<add key="username" value="username" />
+    <add key="password" value="password" />
+    <add key="gistfile" value="index.html" />
+    <add key="gistdesc" value="hello world" />
 ```    
     and change this 3 parameter to your own 
     
