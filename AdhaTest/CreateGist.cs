@@ -14,7 +14,7 @@ namespace AdhaTest
 {
     [Order(1)]
     [NonParallelizable]
-    class CreatePublicGit
+    class CreateGist
     {
         private IWebDriver driver;
         private IWebElement signButton, login_field, password,
@@ -44,27 +44,26 @@ namespace AdhaTest
                 signButton.Click();
             login_field = driver.FindElement(By.Id("login_field"));
             password = driver.FindElement(By.Id("password"));
-            commit = driver.FindElement(By.Name("commit"));
+            commit = driver.FindElement(By.Name("commit")); 
             Assert.That(login_field, Is.Not.Null, "page login is display");
 
             login_field.SendKeys(username);
             password.SendKeys(pass);
             commit.Click();
-            var iconBell = driver.FindElement(By.CssSelector("svg.octicon.octicon-bell > path"));
+            var iconBell = driver.FindElement(By.CssSelector("svg.octicon.octicon-bell > path")); 
             Assert.That(iconBell.Displayed, Is.True, "gist home is display");
 
+            //step click add
             var add = driver.FindElement(By.CssSelector("svg.octicon.octicon-plus > path"));
             add.Click();
+
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             var desc = wait.Until(driver => driver.FindElement(By.CssSelector("input.form-control.input-block.input-contrast"))); 
             desc.SendKeys(gistdesc);
             var filename = driver.FindElement(By.CssSelector("div#gists > div:nth-of-type(2) > div > div > div > input:nth-of-type(2)"));
             filename.SendKeys(gistfile);
-
-            //driver.ExecuteJavaScript(@"var theDiv = document.getElementsByClassName('.CodeMirror - line');
-            //var content = document.createTextNode('This is a paragraph');
-            //theDiv.appendChild(content);");
-
+             
+            //todo still cannot fill the content when creating gist
             var ccc = driver.FindElement(By.CssSelector("div#gists > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(5) > div > div > div > div > div:nth-of-type(5) > div > pre"));
             ccc.SendKeys("ddd");
 

@@ -11,30 +11,30 @@ using OpenQA.Selenium.Support.UI;
 
 namespace AdhaTest
 {
-    [Order(2)]
+    [Order(4)]
     [NonParallelizable]
-    class ListoFGit
+    class DeleteGist
     {
         private IWebDriver driver;
         private IWebElement signButton, login_field, password,
             commit, btn_new, repository_name, btn_submit;
 
-        private string username, pass, reponame;
+        private string username, pass, gistname;
 
         [SetUp]
         public void startBrowser()
         {
             username = ConfigurationSettings.AppSettings["username"];
             pass = ConfigurationSettings.AppSettings["password"];
-            reponame = ConfigurationSettings.AppSettings["reponame"];
+            gistname = "mygist";
 
             driver = new ChromeDriver();
             driver.Manage().Window.Maximize();
-            driver.Url = "https://github.com/";
+            driver.Url = "https://gist.github.com/discover";
         }
 
         [Test]
-        public void ListoFGitTest()
+        public void DeleteGistTest()
         {
 
             signButton = driver.FindElement(By.CssSelector("a.HeaderMenu-link.no-underline.mr-3"));
@@ -51,15 +51,31 @@ namespace AdhaTest
             var iconBell = driver.FindElement(By.CssSelector("svg.octicon.octicon-bell > path"));
             Assert.That(iconBell.Displayed, Is.True, "dashboard is display");
 
-            // 
-            var repos = driver.FindElement(By.CssSelector("div:nth-of-type(4) > div > aside > div:nth-of-type(2) > div > div > ul"));
+            var add = driver.FindElement(By.CssSelector("svg.octicon.octicon-plus > path"));
+            add.Click();
+
+            //find gist in list
+            var repos = driver.FindElement(By.CssSelector("main#gist-pjax-container > div > div > div > ul "));
             List<IWebElement> reposList = repos.FindElements(By.TagName("li")).ToList();
             foreach (var li in reposList)
             {
-                Console.WriteLine(li.Text); 
+                if (li.Text.Contains(gistname))
+                {
+                    li.Click();
+                    break;
+                }
             }
 
-            
+            //click delete button
+           var btndelete = driver.FindElement(By.CssSelector("button.btn.btn-sm.btn-danger"));
+            btndelete.Click(); 
+            //click ok alert
+            driver.SwitchTo().Alert().Accept();
+
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            var deleteMassage = wait.Until(driver => driver.FindElement(By.CssSelector("div.flash.flash-full.flash-notice")));
+            Assert.That(deleteMassage.Text,Does.Contain("Gist deleted successfully."),"delete gist success");
+
         }
 
         [TearDown]

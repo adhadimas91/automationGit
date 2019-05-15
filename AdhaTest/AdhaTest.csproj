@@ -59,10 +59,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreatePublicGit.cs" />
-    <Compile Include="DeleteGit.cs" />
-    <Compile Include="EditGit.cs" />
-    <Compile Include="ListoFGit.cs" />
+    <Compile Include="CreateGist.cs" />
+    <Compile Include="DeleteGist.cs" />
+    <Compile Include="EditGist.cs" />
+    <Compile Include="ListGist.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

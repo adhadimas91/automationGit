@@ -11,9 +11,9 @@ using OpenQA.Selenium.Support.UI;
 
 namespace AdhaTest
 {
-    [Order(4)]
+    [Order(2)]
     [NonParallelizable]
-    class DeleteGit
+    class ListGist
     {
         private IWebDriver driver;
         private IWebElement signButton, login_field, password,
@@ -25,8 +25,7 @@ namespace AdhaTest
         public void startBrowser()
         {
             username = ConfigurationSettings.AppSettings["username"];
-            pass = ConfigurationSettings.AppSettings["password"];
-            reponame = "dua";
+            pass = ConfigurationSettings.AppSettings["password"]; 
 
             driver = new ChromeDriver();
             driver.Manage().Window.Maximize();
@@ -34,7 +33,7 @@ namespace AdhaTest
         }
 
         [Test]
-        public void DeleteGitTest()
+        public void ListGistTest()
         {
 
             signButton = driver.FindElement(By.CssSelector("a.HeaderMenu-link.no-underline.mr-3"));
@@ -54,26 +53,20 @@ namespace AdhaTest
             var add = driver.FindElement(By.CssSelector("svg.octicon.octicon-plus > path"));
             add.Click();
 
-            //find repo in list
-            var repos = driver.FindElement(By.CssSelector("main#gist-pjax-container > div > div > div > ul "));
-            List<IWebElement> reposList = repos.FindElements(By.TagName("li")).ToList();
+            //click link all gist
+            var linkAll = driver.FindElement(By.CssSelector("main#gist-pjax-container > div > div > div > ul > li > a"));
+            linkAll.Click();
+
+            //find gist in list 
+            var reposList = driver.FindElements(By.CssSelector("div.gist-snippet-meta.d-inline-block.width-full > div.float-left > div.d-inline-block span.f6.text-gray"));
+            List<string> dataGist = new List<string>();
             foreach (var li in reposList)
             {
-                if (li.Text.Contains(reponame))
-                {
-                    li.Click();
-                    break;
-                }
+                dataGist.Add(li.Text);
+                Console.WriteLine(li.Text);
             }
-
-           var btndelete = driver.FindElement(By.CssSelector("button.btn.btn-sm.btn-danger"));
-            btndelete.Click();
-
-            driver.SwitchTo().Alert().Accept();
-
-           // var setting = driver.FindElement(By.CssSelector("svg.octicon.octicon-gear"));
-           // setting.Click();
- 
+            
+            Assert.That(dataGist, Is.Not.Null.Or.Empty, $"{dataGist} data in list");
         }
 
         [TearDown]

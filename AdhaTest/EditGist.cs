@@ -13,28 +13,28 @@ namespace AdhaTest
 {
     [Order(3)]
     [NonParallelizable]
-    class EditGit
+    class EditGist
     {
         private IWebDriver driver;
         private IWebElement signButton, login_field, password,
             commit, btn_new, repository_name, btn_submit;
 
-        private string username, pass, reponame;
+        private string username, pass, gistname;
 
         [SetUp]
         public void startBrowser()
         {
             username = ConfigurationSettings.AppSettings["username"];
             pass = ConfigurationSettings.AppSettings["password"];
-            reponame = ConfigurationSettings.AppSettings["reponame"];
+            gistname = "mygist";
 
             driver = new ChromeDriver();
             driver.Manage().Window.Maximize();
-            driver.Url = "https://github.com/";
+            driver.Url = "https://gist.github.com/discover";
         }
 
         [Test]
-        public void EditPublicGitTest()
+        public void EditGistTest()
         {
 
             signButton = driver.FindElement(By.CssSelector("a.HeaderMenu-link.no-underline.mr-3"));
@@ -49,38 +49,40 @@ namespace AdhaTest
             password.SendKeys(pass);
             commit.Click();
             var iconBell = driver.FindElement(By.CssSelector("svg.octicon.octicon-bell > path"));
-            Assert.That(iconBell.Displayed, Is.True, "dashboard is display"); 
+            Assert.That(iconBell.Displayed, Is.True, "dashboard is display");
 
-            //find repo in list
-            var repos = driver.FindElement(By.CssSelector("div:nth-of-type(4) > div > aside > div:nth-of-type(2) > div > div > ul"));
+            var add = driver.FindElement(By.CssSelector("svg.octicon.octicon-plus > path"));
+            add.Click();
+
+            //find gist in list
+            var repos = driver.FindElement(By.CssSelector("main#gist-pjax-container > div > div > div > ul "));
             List<IWebElement> reposList = repos.FindElements(By.TagName("li")).ToList();
             foreach (var li in reposList)
             {
-                if (li.Text.Contains(reponame))
+                if (li.Text.Contains(gistname))
                 {
                     li.Click();
                     break;
                 }
             }
+            
+            //click edit button
+            var btnedit = driver.FindElement(By.LinkText("Edit"));
+            btnedit.Click();
 
-            var fieldclone = driver.FindElement(By.CssSelector("span.input-group.width-full"));
-            Assert.That(fieldclone.Displayed, Is.True, "repo page info has display");
+            //update gist desc
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            var desc = wait.Until(driver => driver.FindElement(By.CssSelector("input.form-control.input-block.input-contrast")));
+            desc.Clear();
+            desc.SendKeys("mygistedit");
 
-            var setting = driver.FindElement(By.CssSelector("svg.octicon.octicon-gear"));
-            setting.Click();
-
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-            var renamefield = wait.Until(driver => driver.FindElement(By.Name("new_name")));
-
-            Assert.That(renamefield.Displayed, Is.True, "Repo setting has open");
-            renamefield.Clear();
-            renamefield.SendKeys($"{reponame}update");
-
-            var btnupdate = driver.FindElement(By.CssSelector("button.btn.flex-self-end"));
+            //click update button
+            var btnupdate = driver.FindElement(By.CssSelector("button.btn.btn-primary"));
             btnupdate.Click();
 
-            fieldclone = driver.FindElement(By.Id("empty-setup-clone-url"));
-            Assert.That(fieldclone.GetAttribute("value"), Does.Contain($"{reponame}update"), "repo page succes update");
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            var message = wait.Until(driver => driver.FindElement(By.CssSelector("main#gist-pjax-container > div:nth-of-type(2) > div > div > div")));
+            Assert.That(message.Text,Is.EqualTo("mygistedit"),"gist success updated");
         } 
           
         [TearDown]
