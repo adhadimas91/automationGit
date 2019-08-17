@@ -34,3 +34,4 @@ D:\Development\net\automation\AdhaTest\AdhaTest\obj\Debug\AdhaTest.csproj.CoreCo
 D:\Development\net\automation\AdhaTest\AdhaTest\obj\Debug\AdhaTest.csproj.CopyComplete
 D:\Development\net\automation\AdhaTest\AdhaTest\obj\Debug\AdhaTest.dll
 D:\Development\net\automation\AdhaTest\AdhaTest\obj\Debug\AdhaTest.pdb
+D:\Development\net\automation\AdhaTest\AdhaTest\obj\Debug\AdhaTest.csprojAssemblyReference.cache
