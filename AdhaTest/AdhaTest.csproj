@@ -59,7 +59,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreateGist.cs" />
+    <Compile Include="PageObject\DetailPage.cs" />
+    <Compile Include="PageObject\HomePage.cs" />
+    <Compile Include="Testcase1.cs" />
     <Compile Include="DeleteGist.cs" />
     <Compile Include="EditGist.cs" />
     <Compile Include="ListGist.cs" />
