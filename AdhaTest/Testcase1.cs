@@ -77,7 +77,8 @@ namespace AdhaTest
             Assert.That(title, Is.Not.Empty, "halaman detail berita berhasil terbuka");
              
             detail.clickcomment(); 
-            detail.Writecomment("hanya test");
+            detail.Writecomment("ujian automation");
+            detail.btnComment();
         } 
         [TearDown]
         public void closeBrowser()

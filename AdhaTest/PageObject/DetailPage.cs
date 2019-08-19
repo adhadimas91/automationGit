@@ -42,5 +42,13 @@ namespace AdhaTest.PageObject
         {
             Comment.SendKeys(data);
         }
+         
+        [FindsBy(How = How.CssSelector, Using = "button[data-qa-id='input-comment']")]
+        private IWebElement BtnComment;
+
+        public void btnComment()
+        { 
+            BtnComment.Click();
+        }
     }
 }
