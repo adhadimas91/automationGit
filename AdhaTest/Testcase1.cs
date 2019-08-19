@@ -32,6 +32,7 @@ namespace AdhaTest
             pass = ConfigurationSettings.AppSettings["password"]; 
             driver = new ChromeDriver(); 
             driver.Manage().Window.Maximize();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30000);
             driver.Url = "https://kumparan.com";
         }
 
@@ -50,19 +51,19 @@ namespace AdhaTest
                 {
                     Console.WriteLine("2. Isi email dan password");
                     driver.SwitchTo().Window(next_tab);
-                    WebDriverWait wait2 = new WebDriverWait(driver,new TimeSpan(20));
-                    wait2.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector("input[name='identifier'][type='email']"))).SendKeys("");
-
+                    WebDriverWait wait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(30000));
+                    wait2.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector("input[name='identifier'][type='email']"))).SendKeys("dimasadha91@gmail.com");
                     var next = driver.FindElement(By.Id("identifierNext"));
                     next.Click();
                      
-                    var pass = new WebDriverWait(driver, TimeSpan.FromSeconds(3000)).Until(ExpectedConditions.ElementExists((By.CssSelector("input[name='password'][type='password']"))));
-                    pass.SendKeys("");
+                    var pass = new WebDriverWait(driver, TimeSpan.FromSeconds(30000)).Until(ExpectedConditions.ElementToBeClickable((By.CssSelector("input[name='password'][type='password']"))));
+                    pass.SendKeys("7471063kartika");
                     next = driver.FindElement(By.Id("passwordNext"));
                     next.Click(); 
                 }
             }
-            
+
+
             driver.SwitchTo().Window(parentWindow);
             home = new HomePage(driver);
             var username = home.username();
@@ -74,6 +75,9 @@ namespace AdhaTest
             DetailPage detail = new DetailPage(driver);
             var title = detail.titleNews();
             Assert.That(title, Is.Not.Empty, "halaman detail berita berhasil terbuka");
+             
+            detail.clickcomment(); 
+            detail.Writecomment("hanya test");
         } 
         [TearDown]
         public void closeBrowser()

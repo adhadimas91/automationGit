@@ -13,7 +13,7 @@ namespace AdhaTest.PageObject
         public HomePage(IWebDriver driver)
         {
             this.driver = driver;
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30000));
             PageFactory.InitElements(driver, this);
         }
 
@@ -28,8 +28,10 @@ namespace AdhaTest.PageObject
         [FindsBy(How = How.CssSelector, Using = "[data-qa-id='username']")]
         private IWebElement Username;
 
-        public string username()
-        { 
+        public string username() {  
+        WebDriverWait waits = new WebDriverWait(driver, TimeSpan.FromSeconds(30000)); // 5 seconds timeout
+        waits.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-qa-id='username']")));
+   
             return Username.GetAttribute("title");
         }
 

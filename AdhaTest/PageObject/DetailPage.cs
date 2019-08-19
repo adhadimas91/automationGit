@@ -17,7 +17,7 @@ namespace AdhaTest.PageObject
         public DetailPage(IWebDriver driver)
         {
             this.driver = driver;
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30000));
             PageFactory.InitElements(driver, this);
         }
 
@@ -25,9 +25,22 @@ namespace AdhaTest.PageObject
         private IWebElement TitleNews;
          
         public string titleNews()
-        {
+        { 
+            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("span[data-qa-id='story-title']"))); 
             return TitleNews.Text;
         }
- 
+
+        [FindsBy(How = How.CssSelector, Using = "div[data-qa-id='input-comment'] div > div")]
+        private IWebElement Comment;
+
+        public void clickcomment()
+        {
+            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("div[data-qa-id='input-comment'] div > div")));  
+            Comment.Click();
+        }
+        public void Writecomment(string data)
+        {
+            Comment.SendKeys(data);
+        }
     }
 }
