@@ -84,7 +84,7 @@ namespace AdhaTest
             detail.btnComment();
             KomenPage komen = new KomenPage(driver);
             var komenNews = komen.lastKomen();
-            Assert.That(komenNews, Is.EqualTo("test automation"), "halaman detail berita berhasil terbuka");
+            Assert.That(komenNews, Does.Contain("test automation"), "komen berhasil");
 
         } 
         [TearDown]
