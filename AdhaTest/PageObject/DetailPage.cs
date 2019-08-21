@@ -43,7 +43,7 @@ namespace AdhaTest.PageObject
             Comment.SendKeys(data);
         }
         public void Deletecomment()
-        {
+        {   
             Comment.SendKeys(Keys.Backspace);
             Comment.SendKeys(Keys.Backspace);
             Comment.SendKeys(Keys.Backspace);
@@ -51,7 +51,7 @@ namespace AdhaTest.PageObject
             Comment.SendKeys(Keys.Backspace);
             Comment.SendKeys(Keys.Backspace);
         }
-        [FindsBy(How = How.CssSelector, Using = "button[data-qa-id='btn-send-comment']")]
+        [FindsBy(How = How.CssSelector, Using = "button[data-dddddddddsbbqa-id='btn-send-comment']")]
         private IWebElement BtnComment;
 
         public void btnComment()
